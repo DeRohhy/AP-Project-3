@@ -1,8 +1,16 @@
-a.out: main.o
-	g++ main.o -o a.out
+MANAGER_DIR = manager
 
-main.o: main.cpp
-	g++ -c main.cpp
+installer.out: main.o CommandParser.o ComponentManager.o
+	g++ main.o CommandParser.o ComponentManager.o -o installer.out
+
+main.o: main.cpp $(MANAGER_DIR)/CommandParser.h $(MANAGER_DIR)/ComponentManager.h
+	g++ -c main.cpp -I$(MANAGER_DIR)
+
+ComponentManager.o: $(MANAGER_DIR)/ComponentManager.cpp $(MANAGER_DIR)/ComponentManager.h
+	g++ -c $(MANAGER_DIR)/ComponentManager.cpp -I$(MANAGER_DIR)
+
+CommandParser.o: $(MANAGER_DIR)/CommandParser.cpp $(MANAGER_DIR)/CommandParser.h $(MANAGER_DIR)/ComponentManager.h
+	g++ -c $(MANAGER_DIR)/CommandParser.cpp -I$(MANAGER_DIR)
 
 clean:
-	rm *.o a.out
+	rm -f *.o installer.out

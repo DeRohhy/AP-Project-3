@@ -7,11 +7,15 @@
 * =================================================
 */
 
-#include <iostream>
+#include "CommandParser.h"
+#include "ComponentManager.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    ComponentManager manager;
+    CommandParser parser{ manager };
+
+    parser.run();
     
     return 0;
 }
