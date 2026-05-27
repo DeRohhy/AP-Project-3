@@ -2,6 +2,8 @@
 
 #include "ComponentManager.h"
 
+#include <sstream>
+
 class CommandParser
 {
 public:
@@ -10,6 +12,10 @@ public:
     ~CommandParser();
 
     void run();
+
+    void invalidCommand() const;
+
+    void handleAdd(std::stringstream& ss);
 private:
     ComponentManager component_manager;
 };
