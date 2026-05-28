@@ -24,7 +24,7 @@ void CommandParser::run()
 
         if (operation == "ADD") handleAdd(ss);
         else if (operation == "ATTACH") handleAttach(ss);
-        else if (operation == "MOCH_FAIL") handleMockFail(ss);
+        else if (operation == "MOCK_FAIL") handleMockFail(ss);
         else if (operation == "RESOLVE_ALL") handleResolveFail(ss);
         else if (operation == "INSTALL") handleInstall(ss);
         else if (operation == "UNINSTALL") handleUninstall(ss);
