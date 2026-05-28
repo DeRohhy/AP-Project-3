@@ -13,6 +13,8 @@ public:
 
     void changeState(ComponentState new_state);
 
+    ComponentState getState();
+
     std::string getId() const;
 protected:
     ComponentState state;

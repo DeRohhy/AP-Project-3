@@ -15,6 +15,11 @@ void Component::changeState(ComponentState new_state)
     // Use observer pattern and notify to print the state change in console
 }
 
+ComponentState Component::getState()
+{
+    return state;
+}
+
 
 std::string Component::getId() const
 {
