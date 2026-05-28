@@ -23,6 +23,11 @@ void CommandParser::run()
         ss >> operation;
 
         if (operation == "ADD") handleAdd(ss);
+        else if (operation == "ATTACH") handleAttach(ss);
+        else if (operation == "MOCH_FAIL") handleMockFail(ss);
+        else if (operation == "RESOLVE_ALL") handleResolveFail(ss);
+        else if (operation == "INSTALL") handleInstall(ss);
+        else if (operation == "UNINSTALL") handleUninstall(ss);
         else invalidCommand();
     }
 }
@@ -37,6 +42,16 @@ void CommandParser::handleAdd(std::stringstream& ss)
     }
     std::cout << "ADDING!!\n";
 }
+
+void CommandParser::handleAttach(std::stringstream& ss) {}
+
+void CommandParser::handleMockFail(std::stringstream& ss) {}
+
+void CommandParser::handleResolveFail(std::stringstream& ss) {}
+
+void CommandParser::handleInstall(std::stringstream& ss) {}
+
+void CommandParser::handleUninstall(std::stringstream& ss) {}
 
 
 void CommandParser::invalidCommand() const
