@@ -1,6 +1,6 @@
 #include "Observer.h"
 
-#include <vector>
+#include <algorithm>
 
 void Subject::addObserver(Observer* observer)
 {
