@@ -4,5 +4,6 @@
 
 class Module: public Component
 {
-    
+public:
+    bool isPackage() const override;
 };

@@ -14,3 +14,10 @@ void Component::changeState(ComponentState new_state)
     // Todo:
     // Use observer pattern and notify to print the state change in console
 }
+
+
+std::string Component::getId() const
+{
+    return id;
+}
+

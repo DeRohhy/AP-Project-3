@@ -2,6 +2,12 @@
 
 #include <algorithm>
 
+bool Package::isPackage() const 
+{
+    return true;
+}
+
+
 bool Package::addDependency(Component* dep)
 {
     auto it = std::find(dependencies.begin(), dependencies.end(), dep);
