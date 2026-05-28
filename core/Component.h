@@ -8,6 +8,8 @@ class Component
 {
 public:
     Component(const std::string& _id, const std::string& _title, ComponentState _state = ComponentState::PENDING);
+
+    void changeState(ComponentState new_state);
 protected:
     ComponentState state;
     std::string id;
