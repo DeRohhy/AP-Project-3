@@ -2,6 +2,9 @@
 
 #include <algorithm>
 
+Package::Package(const std::string& _id, const std::string& _title, ComponentState _state)
+    : Component(_id, _title, _state) {}
+
 bool Package::hasDependency(std::string id)
 {
     for (auto* dep: dependencies)

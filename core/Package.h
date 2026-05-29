@@ -8,6 +8,8 @@
 class Package: public Component
 {
 public:
+    Package(const std::string& _id, const std::string& _title, ComponentState _state = ComponentState::PENDING);
+
     bool hasDependency(std::string id);
 
     void addDependency(Component* dep);
