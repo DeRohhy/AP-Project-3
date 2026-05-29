@@ -4,6 +4,9 @@
 #include <string>
 #include <sstream>
 
+const std::string PACKAGE = "PACKAGE", MODULE = "MODULE";
+
+
 CommandParser::CommandParser(const ComponentManager& _manager) :
     component_manager{ _manager } {}
 
@@ -30,17 +33,39 @@ void CommandParser::run()
         else if (operation == "UNINSTALL") handleUninstall(ss);
         else invalidCommand();
     }
+
 }
 
 void CommandParser::handleAdd(std::stringstream& ss) 
 {
     std::string type;
-    if (!(ss >> type) || (type != "MODULE" && type != "PACKAGE"))
+    if (!(ss >> type) || (type != MODULE && type != PACKAGE))
     {
         invalidCommand();
         return;
     }
-    std::cout << "ADDING!!\n";
+
+    std::string id;
+    if (!(ss >> id))
+    {
+        invalidCommand();
+        return;
+    }
+
+    std::string title;
+    getline(ss >> std::ws, title); // using std::ws manipulator to consume leading whitespace before getline reads
+    if (title.empty())
+    {
+        invalidCommand();
+        return;
+    }
+    
+    if ((type == MODULE && !component_manager.addModule(id, title)) ||
+        (type == PACKAGE && !component_manager.addPackage(id, title)))
+    {
+        std::cout << "ERROR: Component with ID " << id << " already exists\n";
+    }
+    
 }
 
 void CommandParser::handleAttach(std::stringstream& ss) {}
