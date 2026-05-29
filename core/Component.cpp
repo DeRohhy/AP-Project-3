@@ -15,7 +15,7 @@ void Component::changeState(ComponentState new_state)
     // Use observer pattern and notify to print the state change in console
 }
 
-ComponentState Component::getState()
+ComponentState Component::getState() const
 {
     return state;
 }
@@ -26,3 +26,7 @@ std::string Component::getId() const
     return id;
 }
 
+void Component::setMockFail(bool value)
+{
+    mock_fail = value;
+}

@@ -13,11 +13,14 @@ public:
 
     void changeState(ComponentState new_state);
 
-    ComponentState getState();
+    ComponentState getState() const;
 
     std::string getId() const;
+
+    void setMockFail(bool value);
 protected:
     ComponentState state;
     std::string id;
     std::string title;
+    bool mock_fail;
 };
