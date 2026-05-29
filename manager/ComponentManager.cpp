@@ -3,6 +3,7 @@
 #include "../core/Module.h"
 
 #include <iostream>
+
 ComponentManager::ComponentManager() = default;
 
 ComponentManager::~ComponentManager() 

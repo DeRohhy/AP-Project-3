@@ -68,7 +68,38 @@ void CommandParser::handleAdd(std::stringstream& ss)
     
 }
 
-void CommandParser::handleAttach(std::stringstream& ss) {}
+void CommandParser::handleAttach(std::stringstream& ss)
+{
+    std::string package_id, child_id;
+
+    if (!(ss >> package_id >> child_id))
+    {
+        invalidCommand();
+        return;
+    }
+
+    AttachResult result = component_manager.attachComponent(package_id, child_id);
+    switch (result)
+    {
+    case AttachResult::PACKAGE_NOT_FOUND:
+        std::cout << "Error: Component " << package_id << " does not exist\n";
+        break;
+    case AttachResult::CHILD_NOT_FOUND:
+        std::cout << "Error: Component " << child_id << " does not exist\n";
+        break;  
+    case AttachResult::NOT_A_PACKAGE:
+        std::cout << "Error: Cannot attach to a module\n";
+        break;
+    case AttachResult::ALREADY_ATTACHED:
+        std::cout << "Error: Component " << child_id << " is already attached to " << package_id << '\n';
+        break;
+    case AttachResult::PACKAGE_ALREADY_INSTALLED:
+        std::cout << "Error: Cannot attach to an already installed package\n";
+        break;
+    case AttachResult::SUCCESS:
+        break;
+    }
+}
 
 void CommandParser::handleMockFail(std::stringstream& ss) {}
 
