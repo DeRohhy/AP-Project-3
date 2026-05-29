@@ -23,7 +23,12 @@ public:
 
     Component* getComponent(const std::string& id);
 
-    AttachResult AttachComponent(const std::string& package_id, const std::string& child_id);
+    bool addModule(const std::string id, const std::string title);
+    
+    bool addPackage(const std::string id, const std::string title);
+
+    AttachResult attachComponent(const std::string& package_id, const std::string& child_id);
+    
 private:
     std::vector<Component*> components;
 };

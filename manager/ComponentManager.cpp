@@ -1,6 +1,8 @@
 #include "ComponentManager.h"
 #include "../core/Package.h"
+#include "../core/Module.h"
 
+#include <iostream>
 ComponentManager::ComponentManager() = default;
 
 ComponentManager::~ComponentManager() 
@@ -18,7 +20,33 @@ Component* ComponentManager::getComponent(const std::string& id)
 }
 
 
-AttachResult ComponentManager::AttachComponent(const std::string& package_id, const std::string& child_id)
+bool ComponentManager::addModule(const std::string id, const std::string title)
+{
+    if (getComponent(id) != nullptr)
+        return false;
+
+    Module* new_module = new Module{ id, title };
+
+    components.push_back(new_module);
+    
+    return true;
+}
+
+bool ComponentManager::addPackage(const std::string id, const std::string title)
+{
+    if (getComponent(id) != nullptr)
+        return false;
+
+    
+    Package* new_package = new Package{ id, title };
+
+    components.push_back(new_package);
+    
+    return true;
+}
+
+
+AttachResult ComponentManager::attachComponent(const std::string& package_id, const std::string& child_id)
 {
     Component* parent_component = getComponent(package_id);
     Component* child_component = getComponent(child_id);
@@ -53,3 +81,4 @@ AttachResult ComponentManager::AttachComponent(const std::string& package_id, co
 
     return AttachResult::SUCCESS;
 }
+
