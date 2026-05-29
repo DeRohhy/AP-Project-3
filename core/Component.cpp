@@ -26,6 +26,11 @@ std::string Component::getId() const
     return id;
 }
 
+bool Component::isMockFail() const
+{
+    return mock_fail;
+}
+
 void Component::setMockFail(bool value)
 {
     mock_fail = value;

@@ -17,6 +17,8 @@ public:
 
     std::string getId() const;
 
+    bool isMockFail() const;
+
     void setMockFail(bool value);
 protected:
     ComponentState state;
