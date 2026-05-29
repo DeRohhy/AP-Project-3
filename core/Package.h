@@ -3,11 +3,14 @@
 #include "Component.h"
 
 #include <vector>
+#include <string>
 
 class Package: public Component
 {
 public:
-    bool addDependency(Component* dependency);
+    bool hasDependency(std::string id);
+
+    void addDependency(Component* dep);
 
     bool isPackage() const override;
 private:
