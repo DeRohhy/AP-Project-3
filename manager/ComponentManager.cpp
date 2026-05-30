@@ -131,7 +131,7 @@ InstallResult ComponentManager::installComponent(const std::string& id)
     if (component->getState() == ComponentState::INSTALLED)
         return InstallResult::ALREADY_INSTALLED;
 
-    std::stack<Component*> installation_order;
+    std::vector<Component*> installation_order;
     bool result = component->install(installation_order);
 
     if (result)
@@ -139,16 +139,6 @@ InstallResult ComponentManager::installComponent(const std::string& id)
         component->setTopLevel(true);
 
         return InstallResult::SUCCESS;
-    }
-
-    // set all successfuly installed components to pending in LIFO order
-    while (!installation_order.empty())
-    {
-        Component* cur = installation_order.top();
-
-        cur->changeState(ComponentState::PENDING);
-
-        installation_order.pop();
     }
     
     return InstallResult::FAILED;

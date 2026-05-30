@@ -9,7 +9,7 @@ bool Module::isPackage() const
     return false;
 }
 
-bool Module::install(std::stack<Component*>& installation_order)
+bool Module::install(std::vector<Component*>& installation_order)
 {
     if (mock_fail)
     {
@@ -21,7 +21,7 @@ bool Module::install(std::stack<Component*>& installation_order)
     {
         changeState(ComponentState::INSTALLED);
         
-        installation_order.push(this);
+        installation_order.push_back(this);
     }
 
     return true;

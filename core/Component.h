@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <stack>
 #include <vector>
 
 #include "../observer/Observer.h"
@@ -26,7 +25,7 @@ public:
     void addObserver(Observer* observer);
     void setInstalledParentCount(int value);
     
-    virtual bool install(std::stack<Component*>& installation_order) = 0;
+    virtual bool install(std::vector<Component*>& installation_order) = 0;
     virtual void uninstall() = 0;
     bool removeSelf();
 

@@ -49,7 +49,7 @@ void Package::changeState(ComponentState new_state)
 }
 
 
-bool Package::install(std::stack<Component*>& installation_order) 
+bool Package::install(std::vector<Component*>& installation_order) 
 {
     if (mock_fail)
     {
@@ -60,17 +60,28 @@ bool Package::install(std::stack<Component*>& installation_order)
     if (getState() == ComponentState::INSTALLED)
         return true;
 
+    std::vector<Component*> child_installation_order;
+
     for (Component* dep: dependencies)
     {
-        if (!dep->install(installation_order))
+        if (!dep->install(child_installation_order))
         {
+            for (auto it = child_installation_order.rbegin(); it != child_installation_order.rend(); ++it)
+            {
+                Component* component = *it;
+
+                component->changeState(ComponentState::PENDING);
+            }
             changeState(ComponentState::FAILED);
             return false;
         }
+
+        for (Component* component: child_installation_order)
+            installation_order.push_back(component);
     }
 
     changeState(ComponentState::INSTALLED);
-    installation_order.push(this);
+    installation_order.push_back(this);
 
     return true;
 }

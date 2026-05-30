@@ -9,6 +9,6 @@ public:
 
     bool isPackage() const override;
 
-    bool install(std::stack<Component*>& installation_order) override;
+    bool install(std::vector<Component*>& installation_order) override;
     void uninstall() override;
 };
