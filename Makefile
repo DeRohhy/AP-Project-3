@@ -2,8 +2,8 @@ MANAGER_DIR = manager
 OBSERVER_DIR = observer
 CORE_DIR = core
 
-installer.out: main.o CommandParser.o ComponentManager.o Component.o Package.o Module.o SystemLogger.o
-	g++ main.o CommandParser.o ComponentManager.o Component.o Package.o Module.o SystemLogger.o -o installer.out
+installer.exe: main.o CommandParser.o ComponentManager.o Component.o Package.o Module.o SystemLogger.o
+	g++ main.o CommandParser.o ComponentManager.o Component.o Package.o Module.o SystemLogger.o -o installer.exe
 
 main.o: main.cpp $(MANAGER_DIR)/CommandParser.h $(MANAGER_DIR)/ComponentManager.h
 	g++ -c main.cpp -I$(MANAGER_DIR)
