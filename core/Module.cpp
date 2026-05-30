@@ -26,3 +26,9 @@ bool Module::install(std::stack<Component*>& installation_order)
 
     return true;
 }
+
+
+void Module::uninstall()
+{
+    changeState(ComponentState::PENDING);
+}
