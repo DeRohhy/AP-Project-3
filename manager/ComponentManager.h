@@ -22,6 +22,13 @@ enum class MockFailResult
     SUCCESS,
 };
 
+enum class ResolveFailResult
+{
+    COMPONENT_NOT_FOUND,
+    NOT_IN_MOCK_FAIL,
+    SUCCESS,
+};
+
 class ComponentManager
 {
 public:
@@ -38,7 +45,9 @@ public:
     AttachResult attachComponent(const std::string& package_id, const std::string& child_id);
 
     MockFailResult mockFailComponent(const std::string& id);
-    
+
+    ResolveFailResult resolveFailComponent(const std::string& id);
+
 private:
     std::vector<Component*> components;
 };

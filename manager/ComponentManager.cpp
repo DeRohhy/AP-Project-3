@@ -102,3 +102,17 @@ MockFailResult ComponentManager::mockFailComponent(const std::string& id)
     return MockFailResult::SUCCESS;
 }
 
+ResolveFailResult ComponentManager::resolveFailComponent(const std::string& id)
+{
+    Component* component = getComponent(id);
+
+    if (component == nullptr)
+        return ResolveFailResult::COMPONENT_NOT_FOUND;
+
+    if (!component->isMockFail())
+        return ResolveFailResult::NOT_IN_MOCK_FAIL;
+    
+    component->setMockFail(false);
+
+    return ResolveFailResult::SUCCESS;
+}
