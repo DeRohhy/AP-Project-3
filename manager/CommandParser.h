@@ -13,8 +13,6 @@ public:
 
     void run();
 
-    void invalidCommand() const;
-
     void handleAdd(std::stringstream& ss);
 
     void handleAttach(std::stringstream& ss);
@@ -29,4 +27,9 @@ public:
 
 private:
     ComponentManager component_manager;
+
+    void invalidCommand() const;
+
+    void componentNotFound(std::string id) const;
+
 };

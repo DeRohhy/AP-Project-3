@@ -36,7 +36,7 @@ void CommandParser::run()
 
 }
 
-void CommandParser::handleAdd(std::stringstream& ss) 
+void CommandParser::handleAdd(std::stringstream& ss)
 {
     std::string type;
     if (!(ss >> type) || (type != MODULE && type != PACKAGE))
@@ -59,13 +59,13 @@ void CommandParser::handleAdd(std::stringstream& ss)
         invalidCommand();
         return;
     }
-    
+
     if ((type == MODULE && !component_manager.addModule(id, title)) ||
         (type == PACKAGE && !component_manager.addPackage(id, title)))
     {
         std::cout << "ERROR: Component with ID " << id << " already exists\n";
     }
-    
+
 }
 
 void CommandParser::handleAttach(std::stringstream& ss)
@@ -82,11 +82,11 @@ void CommandParser::handleAttach(std::stringstream& ss)
     switch (result)
     {
     case AttachResult::PACKAGE_NOT_FOUND:
-        std::cout << "Error: Component " << package_id << " does not exist\n";
+        componentNotFound(package_id);
         break;
     case AttachResult::CHILD_NOT_FOUND:
-        std::cout << "Error: Component " << child_id << " does not exist\n";
-        break;  
+        componentNotFound(child_id);
+        break;
     case AttachResult::NOT_A_PACKAGE:
         std::cout << "Error: Cannot attach to a module\n";
         break;
@@ -101,7 +101,30 @@ void CommandParser::handleAttach(std::stringstream& ss)
     }
 }
 
-void CommandParser::handleMockFail(std::stringstream& ss) {}
+void CommandParser::handleMockFail(std::stringstream& ss)
+{
+    std::string id;
+    if (!(ss >> id))
+    {
+        invalidCommand();
+        return;
+    }
+
+    switch(component_manager.mockFailComponent(id))
+    {
+    case MockFailResult::COMPONENT_NOT_FOUND:
+        componentNotFound(id);
+        break;
+    case MockFailResult::ALREADY_MOCK_FAILED:
+        std::cout << "ERROR: Component " << id << " is already set to fail\n";
+        break;
+    case MockFailResult::ALREADY_INSTALLED:
+        std::cout << "ERROR: Component " << id << " is already installed\n";
+        break;
+    case MockFailResult::SUCCESS:
+        break;
+    }
+}
 
 void CommandParser::handleResolveFail(std::stringstream& ss) {}
 
@@ -113,4 +136,9 @@ void CommandParser::handleUninstall(std::stringstream& ss) {}
 void CommandParser::invalidCommand() const
 {
     std::cout << "ERROR: Invalid command\n";
+}
+
+void CommandParser::componentNotFound(std::string id) const
+{
+    std::cout << "Error: Component " << id << " does not exist\n";
 }
