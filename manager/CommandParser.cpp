@@ -28,7 +28,7 @@ void CommandParser::run()
         if (operation == "ADD") handleAdd(ss);
         else if (operation == "ATTACH") handleAttach(ss);
         else if (operation == "MOCK_FAIL") handleMockFail(ss);
-        else if (operation == "RESOLVE_ALL") handleResolveFail(ss);
+        else if (operation == "RESOLVE_FAIL") handleResolveFail(ss);
         else if (operation == "INSTALL") handleInstall(ss);
         else if (operation == "UNINSTALL") handleUninstall(ss);
         else invalidCommand();
@@ -126,7 +126,27 @@ void CommandParser::handleMockFail(std::stringstream& ss)
     }
 }
 
-void CommandParser::handleResolveFail(std::stringstream& ss) {}
+void CommandParser::handleResolveFail(std::stringstream& ss)
+{
+    std::string id;
+    if (!(ss >> id))
+    {
+        invalidCommand();
+        return;
+    }
+
+    switch(component_manager.resolveFailComponent(id))
+    {
+    case ResolveFailResult::COMPONENT_NOT_FOUND:
+        componentNotFound(id);
+        break;
+    case ResolveFailResult::NOT_IN_MOCK_FAIL:
+        std::cout << "ERROR: Component " << id << " is not in a mock fail state\n";
+        break;
+    case ResolveFailResult::SUCCESS:
+        break;
+    }
+}
 
 void CommandParser::handleInstall(std::stringstream& ss) {}
 

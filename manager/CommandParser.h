@@ -31,5 +31,4 @@ private:
     void invalidCommand() const;
 
     void componentNotFound(std::string id) const;
-
 };
