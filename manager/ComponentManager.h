@@ -14,6 +14,14 @@ enum class AttachResult
     SUCCESS,
 };
 
+enum class MockFailResult
+{
+    COMPONENT_NOT_FOUND,
+    ALREADY_MOCK_FAILED,
+    ALREADY_INSTALLED,
+    SUCCESS,
+};
+
 class ComponentManager
 {
 public:
@@ -28,6 +36,8 @@ public:
     bool addPackage(const std::string id, const std::string title);
 
     AttachResult attachComponent(const std::string& package_id, const std::string& child_id);
+
+    MockFailResult mockFailComponent(const std::string& id);
     
 private:
     std::vector<Component*> components;

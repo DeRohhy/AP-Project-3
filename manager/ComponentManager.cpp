@@ -83,3 +83,22 @@ AttachResult ComponentManager::attachComponent(const std::string& package_id, co
     return AttachResult::SUCCESS;
 }
 
+
+MockFailResult ComponentManager::mockFailComponent(const std::string& id)
+{
+    Component* component = getComponent(id);
+
+    if (component == nullptr)
+        return MockFailResult::COMPONENT_NOT_FOUND;
+
+    if (component->isMockFail())
+        return MockFailResult::ALREADY_MOCK_FAILED;
+    
+    if (component->getState() == ComponentState::INSTALLED)
+        return MockFailResult::ALREADY_INSTALLED;
+    
+    component->setMockFail(true);
+    
+    return MockFailResult::SUCCESS;
+}
+
