@@ -21,13 +21,14 @@ Component* ComponentManager::getComponent(const std::string& id)
     return nullptr;
 }
 
-
 bool ComponentManager::addModule(const std::string id, const std::string title)
 {
     if (getComponent(id) != nullptr)
         return false;
 
     Module* new_module = new Module{ id, title };
+
+    new_module->addObserver(&logger);
 
     components.push_back(new_module);
     
@@ -41,6 +42,8 @@ bool ComponentManager::addPackage(const std::string id, const std::string title)
 
     
     Package* new_package = new Package{ id, title };
+
+    new_package->addObserver(&logger);
 
     components.push_back(new_package);
     
@@ -128,7 +131,6 @@ InstallResult ComponentManager::installComponent(const std::string& id)
     if (component->getState() == ComponentState::INSTALLED)
         return InstallResult::ALREADY_INSTALLED;
 
-
     std::stack<Component*> installation_order;
     bool result = component->install(installation_order);
 
@@ -150,4 +152,41 @@ InstallResult ComponentManager::installComponent(const std::string& id)
     }
     
     return InstallResult::FAILED;
+}
+
+UninstallResult ComponentManager::uninstallComponent(const std::string& id)
+{
+    Component* component = getComponent(id);
+
+    if (component == nullptr)
+        return UninstallResult::COMPONENT_NOT_FOUND;
+
+    if (component->getState() != ComponentState::INSTALLED)
+        return UninstallResult::COMPONENT_NOT_INSTALLED;
+
+    if (component->getInstalledParentCount() > 0)
+        return UninstallResult::COMPONENT_IS_REQUIRED;
+    
+    component->setTopLevel(false);
+    component->uninstall();
+
+    return UninstallResult::SUCCESS;
+}
+
+bool ComponentManager::uninstallAll()
+{
+    int uninstalled_count = 0;
+    // uninstall all components in reverse adding order
+
+    if (components.empty())
+        return false;
+    
+    for (auto it = components.rbegin(); it != components.rend(); ++it)
+    {
+        Component* component = *it;
+
+        uninstalled_count += component->removeSelf();
+    }
+
+    return uninstalled_count > 0;
 }

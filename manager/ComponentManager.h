@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "../core/Component.h"
+#include "../observer/SystemLogger.h"
 
 enum class AttachResult
 {
@@ -37,6 +38,14 @@ enum class InstallResult
     SUCCESS,
 };
 
+enum class UninstallResult
+{
+    COMPONENT_NOT_FOUND,
+    COMPONENT_NOT_INSTALLED,
+    COMPONENT_IS_REQUIRED,
+    SUCCESS,
+};
+
 class ComponentManager
 {
 public:
@@ -58,6 +67,11 @@ public:
 
     InstallResult installComponent(const std::string& id);
 
+    UninstallResult uninstallComponent(const std::string& id);
+
+    bool uninstallAll();
+
 private:
     std::vector<Component*> components;
+    SystemLogger logger;
 };

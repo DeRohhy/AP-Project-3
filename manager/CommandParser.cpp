@@ -88,13 +88,13 @@ void CommandParser::handleAttach(std::stringstream& ss)
         componentNotFound(child_id);
         break;
     case AttachResult::NOT_A_PACKAGE:
-        std::cout << "Error: Cannot attach to a module\n";
+        std::cout << "ERROR: Cannot attach to a module\n";
         break;
     case AttachResult::ALREADY_ATTACHED:
-        std::cout << "Error: Component " << child_id << " is already attached to " << package_id << '\n';
+        std::cout << "ERROR: Component " << child_id << " is already attached to " << package_id << '\n';
         break;
     case AttachResult::PACKAGE_ALREADY_INSTALLED:
-        std::cout << "Error: Cannot attach to an already installed package\n";
+        std::cout << "ERROR: Cannot attach to an already installed package\n";
         break;
     case AttachResult::SUCCESS:
         break;
@@ -172,7 +172,38 @@ void CommandParser::handleInstall(std::stringstream& ss)
     }
 }
 
-void CommandParser::handleUninstall(std::stringstream& ss) {}
+void CommandParser::handleUninstall(std::stringstream& ss)
+{
+    std::string id;
+    if (!(ss >> id))
+    {
+        invalidCommand();
+        return;
+    }
+
+    if (id != "-A")
+    {
+        switch (component_manager.uninstallComponent(id))
+        {
+        case UninstallResult::COMPONENT_NOT_FOUND:
+            componentNotFound(id);
+            break;
+        case UninstallResult::COMPONENT_NOT_INSTALLED:
+            std::cout << "ERROR: Component " << id << " is not currently installed\n";
+            break;
+        case UninstallResult::COMPONENT_IS_REQUIRED:
+            std::cout << "ERROR: Component " << id << " is required by another package\n";
+            break;
+        case UninstallResult::SUCCESS:
+            break;
+        }
+    }
+    else
+    {
+        if (!component_manager.uninstallAll())
+            std::cout << "ERROR: No installed components to uninstall\n";
+    }
+}
 
 
 void CommandParser::invalidCommand() const
@@ -182,10 +213,10 @@ void CommandParser::invalidCommand() const
 
 void CommandParser::componentNotFound(std::string id) const
 {
-    std::cout << "Error: Component " << id << " does not exist\n";
+    std::cout << "ERROR: Component " << id << " does not exist\n";
 }
 
 void CommandParser::componentAlreadyInstalled(std::string id) const
 {
-    std::cout << "Error: Component " << id << " is already installed\n";
+    std::cout << "ERROR: Component " << id << " is already installed\n";
 }
