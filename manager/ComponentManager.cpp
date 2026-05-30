@@ -3,6 +3,7 @@
 #include "../core/Module.h"
 
 #include <iostream>
+#include <stack>
 
 ComponentManager::ComponentManager() = default;
 
@@ -115,4 +116,38 @@ ResolveFailResult ComponentManager::resolveFailComponent(const std::string& id)
     component->setMockFail(false);
 
     return ResolveFailResult::SUCCESS;
+}
+
+InstallResult ComponentManager::installComponent(const std::string& id)
+{
+    Component* component = getComponent(id);
+
+    if (component == nullptr)
+        return InstallResult::COMPONENT_NOT_FOUND;
+
+    if (component->getState() == ComponentState::INSTALLED)
+        return InstallResult::ALREADY_INSTALLED;
+
+
+    std::stack<Component*> installation_order;
+    bool result = component->install(installation_order);
+
+    if (result)
+    {
+        component->setTopLevel(true);
+
+        return InstallResult::SUCCESS;
+    }
+
+    // set all successfuly installed components to pending in LIFO order
+    while (!installation_order.empty())
+    {
+        Component* cur = installation_order.top();
+
+        cur->changeState(ComponentState::PENDING);
+
+        installation_order.pop();
+    }
+    
+    return InstallResult::FAILED;
 }

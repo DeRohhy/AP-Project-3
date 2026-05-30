@@ -29,6 +29,14 @@ enum class ResolveFailResult
     SUCCESS,
 };
 
+enum class InstallResult
+{
+    COMPONENT_NOT_FOUND,
+    ALREADY_INSTALLED,
+    FAILED,
+    SUCCESS,
+};
+
 class ComponentManager
 {
 public:
@@ -47,6 +55,8 @@ public:
     MockFailResult mockFailComponent(const std::string& id);
 
     ResolveFailResult resolveFailComponent(const std::string& id);
+
+    InstallResult installComponent(const std::string& id);
 
 private:
     std::vector<Component*> components;
