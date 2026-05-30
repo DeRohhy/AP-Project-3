@@ -8,3 +8,21 @@ bool Module::isPackage() const
 {
     return false;
 }
+
+bool Module::install(std::stack<Component*>& installation_order)
+{
+    if (mock_fail)
+    {
+        changeState(ComponentState::FAILED);
+        return false;
+    }
+
+    if (getState() != ComponentState::INSTALLED)
+    {
+        changeState(ComponentState::INSTALLED);
+        
+        installation_order.push(this);
+    }
+
+    return true;
+}

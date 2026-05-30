@@ -8,4 +8,6 @@ public:
     Module(const std::string& _id, const std::string& _title, ComponentState _state = ComponentState::PENDING);
 
     bool isPackage() const override;
+
+    bool install(std::stack<Component*>& installation_order) override;
 };

@@ -15,6 +15,9 @@ public:
     void addDependency(Component* dep);
 
     bool isPackage() const override;
+
+    bool install(std::stack<Component*>& installation_order) override;
+
 private:
     std::vector<Component*> dependencies;
 };

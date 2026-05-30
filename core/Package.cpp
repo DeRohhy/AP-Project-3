@@ -30,3 +30,27 @@ bool Package::isPackage() const
 {
     return true;
 }
+
+bool Package::install(std::stack<Component*>& installation_order) 
+{
+    if (mock_fail)
+    {
+        changeState(ComponentState::FAILED);
+        return false;
+    }
+
+    if (getState() == ComponentState::INSTALLED)
+        return true;
+
+    for (Component* dep: dependencies)
+    {
+        if (!dep->install(installation_order))
+        {
+            changeState(ComponentState::FAILED);
+            return false;
+        }
+    }
+
+    changeState(ComponentState::INSTALLED);
+    return true;
+}

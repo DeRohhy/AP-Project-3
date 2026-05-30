@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <stack>
 
 enum class ComponentState { PENDING, INSTALLED, FAILED };
 
@@ -20,9 +21,15 @@ public:
     bool isMockFail() const;
 
     void setMockFail(bool value);
+
+    void setTopLevel(bool value);
+
+    virtual bool install(std::stack<Component*>& installation_order) = 0;
 protected:
-    ComponentState state;
     std::string id;
     std::string title;
     bool mock_fail;
+    bool top_level;
+private:
+    ComponentState state;
 };
