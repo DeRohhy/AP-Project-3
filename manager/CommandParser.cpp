@@ -119,7 +119,7 @@ void CommandParser::handleMockFail(std::stringstream& ss)
         std::cout << "ERROR: Component " << id << " is already set to fail\n";
         break;
     case MockFailResult::ALREADY_INSTALLED:
-        std::cout << "ERROR: Component " << id << " is already installed\n";
+        componentAlreadyInstalled(id);
         break;
     case MockFailResult::SUCCESS:
         break;
@@ -148,7 +148,29 @@ void CommandParser::handleResolveFail(std::stringstream& ss)
     }
 }
 
-void CommandParser::handleInstall(std::stringstream& ss) {}
+void CommandParser::handleInstall(std::stringstream& ss)
+{
+    std::string id;
+    if (!(ss >> id))
+    {
+        invalidCommand();
+        return;
+    }
+
+    switch(component_manager.installComponent(id))
+    {
+    case InstallResult::COMPONENT_NOT_FOUND:
+        componentNotFound(id);
+        break;
+    case InstallResult::ALREADY_INSTALLED:
+        componentAlreadyInstalled(id);
+        break;
+    case InstallResult::FAILED:
+        break;
+    case InstallResult::SUCCESS:
+        break;
+    }
+}
 
 void CommandParser::handleUninstall(std::stringstream& ss) {}
 
@@ -161,4 +183,9 @@ void CommandParser::invalidCommand() const
 void CommandParser::componentNotFound(std::string id) const
 {
     std::cout << "Error: Component " << id << " does not exist\n";
+}
+
+void CommandParser::componentAlreadyInstalled(std::string id) const
+{
+    std::cout << "Error: Component " << id << " is already installed\n";
 }

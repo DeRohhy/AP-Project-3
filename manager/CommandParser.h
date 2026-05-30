@@ -31,4 +31,6 @@ private:
     void invalidCommand() const;
 
     void componentNotFound(std::string id) const;
+
+    void componentAlreadyInstalled(std::string id) const;
 };
