@@ -28,10 +28,11 @@ bool Package::isPackage() const
 
 void Package::changeState(ComponentState new_state)
 {
-    if (getState() == new_state)
+    ComponentState old_state = getState();
+
+    if (old_state == new_state)
         return;
     
-    ComponentState old_state = getState();
     Component::changeState(new_state);
 
     if (new_state == ComponentState::INSTALLED)
@@ -40,14 +41,13 @@ void Package::changeState(ComponentState new_state)
         for (Component* dep: dependencies)
             dep->setInstalledParentCount(dep->getInstalledParentCount() + 1);
     }
-    else if (old_state == ComponentState::INSTALLED)
+    if (old_state == ComponentState::INSTALLED)
     {
         // decrement all dep installed_parent_count by 1
         for (Component* dep: dependencies)
             dep->setInstalledParentCount(dep->getInstalledParentCount() - 1);
     }
 }
-
 
 bool Package::install(std::vector<Component*>& installation_order) 
 {
@@ -94,15 +94,11 @@ void Package::uninstall()
     changeState(ComponentState::PENDING);
     
     // uninstall dependency component in reverse adding order
-    if (!dependencies.empty())
+    for (auto it = dependencies.rbegin(); it != dependencies.rend(); ++it)
     {
-        for (auto it = dependencies.rbegin(); it != dependencies.rend(); ++it)
-        {
-            Component* dep = *it;
+        Component* dep = *it;
 
-            if (dep->getInstalledParentCount() == 0 && !dep->isTopLevel())
-                dep->uninstall();
-        }
+        if (dep->getInstalledParentCount() == 0 && !dep->isTopLevel())
+            dep->uninstall();
     }
-
 }

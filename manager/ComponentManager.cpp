@@ -50,7 +50,6 @@ bool ComponentManager::addPackage(const std::string id, const std::string title)
     return true;
 }
 
-
 AttachResult ComponentManager::attachComponent(const std::string& package_id, const std::string& child_id)
 {
     Component* parent_component = getComponent(package_id);
@@ -86,7 +85,6 @@ AttachResult ComponentManager::attachComponent(const std::string& package_id, co
 
     return AttachResult::SUCCESS;
 }
-
 
 MockFailResult ComponentManager::mockFailComponent(const std::string& id)
 {
@@ -157,8 +155,8 @@ UninstallResult ComponentManager::uninstallComponent(const std::string& id)
     if (component->getInstalledParentCount() > 0)
         return UninstallResult::COMPONENT_IS_REQUIRED;
     
-    component->setTopLevel(false);
     component->uninstall();
+    component->setTopLevel(false);
 
     return UninstallResult::SUCCESS;
 }
@@ -167,10 +165,6 @@ bool ComponentManager::uninstallAll()
 {
     int uninstalled_count = 0;
     // uninstall all components in reverse adding order
-
-    if (components.empty())
-        return false;
-    
     for (auto it = components.rbegin(); it != components.rend(); ++it)
     {
         Component* component = *it;

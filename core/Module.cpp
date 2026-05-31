@@ -30,5 +30,8 @@ bool Module::install(std::vector<Component*>& installation_order)
 
 void Module::uninstall()
 {
+    if (installed_parent_count > 0)
+        return;
+        
     changeState(ComponentState::PENDING);
 }

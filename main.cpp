@@ -13,12 +13,14 @@
 #include "core/Package.h"
 #include "core/Module.h"
 
+#include <iostream>
+
 int main()
 {
     ComponentManager manager;
     CommandParser parser{ manager };
 
     parser.run();
-
+    
     return 0;
 }

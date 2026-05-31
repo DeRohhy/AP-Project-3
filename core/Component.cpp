@@ -1,7 +1,6 @@
 #include "Component.h"
 
 #include <string>
-#include <iostream>
 
 Component::Component(const std::string& _id, const std::string& _title, ComponentState _state) :
     id{ _id }, title{ _title }, state{ _state }, mock_fail{ false }, top_level{ false }, installed_parent_count{ 0 } {};
@@ -69,12 +68,17 @@ void Component::setInstalledParentCount(int value)
 bool Component::removeSelf()
 {
     if (state == ComponentState::PENDING)
+    {
+        installed_parent_count = 0;
         return false;
-    
-    changeState(ComponentState::PENDING);
-    installed_parent_count = 0;
-    mock_fail = false;
+    }
+
+    // we wont use setState for this becuase it is a specific uninstallation
+    this->Component::changeState(ComponentState::PENDING);
+
     top_level = false;
+    mock_fail = false;
+    installed_parent_count = 0;
 
     return true;
 }
